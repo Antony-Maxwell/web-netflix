@@ -3,7 +3,9 @@ import 'package:web_netflix/constants/constants.dart';
 import 'package:web_netflix/widgets/custom_button.dart';
 
 class BackgroundCard extends StatelessWidget {
-  const BackgroundCard({super.key});
+  const BackgroundCard({super.key, required this.image});
+
+  final String image;
 
   @override
   Widget build(BuildContext context) {

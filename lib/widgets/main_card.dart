@@ -13,16 +13,17 @@ class MainCard extends StatelessWidget {
       child: Container(
         width: 100,
         height: 200,
-        decoration: BoxDecoration(
+        decoration: image.isNotEmpty ? BoxDecoration(
           borderRadius: kRadius10,
           image: DecorationImage(
             fit: BoxFit.cover,
             
             image: NetworkImage(
-              "https://image.tmdb.org/t/p$image",
+              "https://image.tmdb.org/t/p/w500$image",
             ),
           ),
-        ),
+        ) : BoxDecoration(),
+        child: image.isEmpty ? CircularProgressIndicator() : null,
       ),
     );
   }

@@ -3,6 +3,5 @@ class RoutesName {
   static String home = "home";
   static String settings = "settings";
   static String privacy = "privacy";
-    static String search = "search";
-
+  static String search = "search";
 }

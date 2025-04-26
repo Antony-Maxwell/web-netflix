@@ -20,22 +20,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final List<MovieModel> movies = [];
+  final List<MovieModel> trendingMovies = [];
 
-  final  List<MovieModel> movies = [];
-
- @override
+  @override
   void initState() {
-    MovieService().fetchPopularMovies().then((value) {
-      movies.addAll(value);
-    },);
+    getData();
     super.initState();
   }
 
+  getData()async{
+    await MovieService().fetchMovies().then(
+      (value) {
+        movies.addAll(value);
+      },
+    );
+
+    await MovieService().fetchTrending().then(
+      (value) {
+        trendingMovies.addAll(value);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    
     return Scaffold(
       drawer: DrawerUI(),
       backgroundColor: const Color.fromARGB(255, 1, 13, 24),
@@ -43,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ValueListenableBuilder(
         valueListenable: scrollNotifier,
         builder: (BuildContext context, index, _) {
-          //notifiListeners use cheyithth scroll  eth direction anu ennu check cheyan
+          //notifiListeners use cheyithth scroll eth direction anu ennu check cheyan
 
           return NotificationListener<UserScrollNotification>(
             onNotification: (notification) {
@@ -60,93 +69,103 @@ class _HomeScreenState extends State<HomeScreen> {
                 ListView(
                   children: [
                     ///Main Image Sction//
-                    BackgroundCard(),
+                    BackgroundCard(image: "dndkhvbskhdbvkhsbv",),
 
-                    Categorys(title: "Popular on Netflix", movieModel: movies,),
+                    Categorys(
+                      title: "Popular on Netflix",
+                      movieModel: movies,
+                    ),
                     kHeight,
-                    Categorys(title: "Trending Now", movieModel: movies,),
+                    Categorys(
+                      title: "Trending Now",
+                      movieModel: trendingMovies,
+                    ),
                     kHeight,
-                    Categorys(title: "Continue Watching", movieModel: movies,),
+                    Categorys(
+                      title: "Continue Watching",
+                      movieModel: movies,
+                    ),
                     kHeight,
-                    Categorys(title: "Blockbuster Action", movieModel: movies,),
+                    Categorys(
+                      title: "Blockbuster Action",
+                      movieModel: movies,
+                    ),
                   ],
                 ),
 
                 // appbar style
                 scrollNotifier.value == true
                     ? AnimatedContainer(
-                      duration: Duration(microseconds: 100),
-                      width: double.infinity,
-                      height: 80,
-                      color: Color.fromRGBO(0, 0, 0, 0.3),
-                      child: Column(
-                        children: [
-                          // … inside your AnimatedContainer’s Column:
-                          Padding(
-                            // adjust left padding if you want the icon closer to the edge
-                            padding: const EdgeInsets.only(left: 16, right: 60),
-                            child: Row(
-                              children: [
-                                // 1) Drawer icon
-                                Builder(
-                                  builder:
-                                      (ctx) => IconButton(
-                                        icon: const Icon(
-                                          Icons.menu,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed:
-                                            () => Scaffold.of(ctx).openDrawer(),
+                        duration: Duration(microseconds: 100),
+                        width: double.infinity,
+                        height: 80,
+                        color: Color.fromRGBO(0, 0, 0, 0.3),
+                        child: Column(
+                          children: [
+                            // … inside your AnimatedContainer’s Column:
+                            Padding(
+                              // adjust left padding if you want the icon closer to the edge
+                              padding:
+                                  const EdgeInsets.only(left: 16, right: 60),
+                              child: Row(
+                                children: [
+                                  // 1) Drawer icon
+                                  Builder(
+                                    builder: (ctx) => IconButton(
+                                      icon: const Icon(
+                                        Icons.menu,
+                                        color: Colors.white,
                                       ),
-                                ),
-
-                                const SizedBox(width: 8),
-
-                                // 2) Your Netflix logo
-                                Image.network(
-                                  //https://image.tmdb.org/t/p/w500/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg
-                                  "https://image.tmdb.org/t/p/w500/"
-                                  "https://cdn-images-1.medium.com/v2/resize:fit:1200/1*ty4NvNrGg4ReETxqU2N3Og.png",
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                Spacer(),
-                                IconButton(
-                                  onPressed: () {
-                                    context.goNamed(
-                                      RoutesName.search,
-                                    ); // Navigate to Settings
-                                  },
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: Colors.grey,
-                                    size: 28,
+                                      onPressed: () =>
+                                          Scaffold.of(ctx).openDrawer(),
+                                    ),
                                   ),
+
+                                  const SizedBox(width: 8),
+
+                                  // 2) Your Netflix logo
+                                  Image.network(
+                                    "https://cdn-images-1.medium.com/v2/resize:fit:1200/1*ty4NvNrGg4ReETxqU2N3Og.png",
+                                    width: 50,
+                                    height: 50,
+                                  ),
+                                  Spacer(),
+                                  IconButton(
+                                    onPressed: () {
+                                      context.goNamed(
+                                        RoutesName.search,
+                                      ); // Navigate to Settings
+                                    },
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: Colors.grey,
+                                      size: 28,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  "Tv Shows",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Text(
+                                  "Movies",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Text(
+                                  "Categories",
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ],
                             ),
-                          ),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                "Tv Shows",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                "Movies",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                "Categories",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
+                          ],
+                        ),
+                      )
                     : kHeight,
               ],
             ),
